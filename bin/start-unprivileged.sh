@@ -1,9 +1,9 @@
 #!/bin/bash
 set -x
 
-EXECUTABLE=/opt/terracoin/bin/terracoind
-DIR=$HOME/.terracoincore
-FILENAME=terracoin.conf
+EXECUTABLE=/opt/htmlcoin/bin/htmlcoind
+DIR=$HOME/.htmlcoin
+FILENAME=htmlcoin.conf
 FILE=$DIR/$FILENAME
 
 # create directory and config file if it does not exist yet

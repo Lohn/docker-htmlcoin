@@ -5,7 +5,7 @@ ARG USER_ID
 ARG GROUP_ID
 ARG VERSION
 
-ENV USER terracoin
+ENV USER htmlcoin
 ENV COMPONENT ${USER}
 ENV HOME /${USER}
 
@@ -32,34 +32,27 @@ RUN set -x \
 	&& chmod +x /usr/local/bin/gosu \
 	&& gosu nobody true
 
-ENV VERSION ${VERSION:-0.12.1.5p}
+ENV VERSION ${VERSION:-2.0.0.1}
 RUN set -x \
-    && mkdir -p /opt/${COMPONENT}/bin \
-    && wget -O /opt/${COMPONENT}/bin/${COMPONENT}-cli "https://github.com/terracoin/terracoin/releases/download/${VERSION}/${COMPONENT}-cli" \
-    && wget -O /opt/${COMPONENT}/bin/${COMPONENT}d "https://github.com/terracoin/terracoin/releases/download/${VERSION}/${COMPONENT}d" \
-    && wget -O /opt/${COMPONENT}/bin/${COMPONENT}-qt "https://github.com/terracoin/terracoin/releases/download/${VERSION}/${COMPONENT}-qt" \
-    && chmod +x /opt/${COMPONENT}/bin/*
+    && mkdir -p /opt/${COMPONENT}/bin 
 
-RUN set -x \
-    && apt-get update && apt-get install -y libboost-all-dev build-essential autoconf libtool pkg-config libssl-dev libevent-dev
+RUN apt-get update && apt-get install -y build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils git cmake libboost-all-dev software-properties-common \
+    && apt-add-repository ppa:bitcoin/bitcoin \
+    && apt-get update && apt-get install -y libdb4.8-dev libdb4.8++-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler
 
 RUN set -x \
-	&& cd /tmp \
-	&& wget http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz \
-	&& tar xzvf db-4.8.30.NC.tar.gz \
-	&& cd db-4.8.30.NC/build_unix/ \
-	&& ../dist/configure --enable-cxx \
-	&& make \
-	&& make install
-
-RUN ln -s /usr/local/BerkeleyDB.4.8 /usr/include/db4.8
-RUN ln -s /usr/include/db4.8/include/* /usr/include
-RUN ln -s /usr/include/db4.8/lib/* /usr/lib
+    && cd /tmp \
+    && git clone https://github.com/HTMLCOIN/HTML5 --recursive \
+    && cd HTML5 \
+    && ./autogen.sh \
+    && ./configure \
+    && make -j2
 
 RUN set -x \
-    && apt-get update && apt-get install -y libminiupnpc-dev
-
-EXPOSE 13333 13332
+    && mv /tmp/HTML5/src/htmlcoin-cli /opt/${COMPONENT}/bin/ \
+    && mv /tmp/HTML5/src/htmlcoin-tx /opt/${COMPONENT}/bin/ \
+    && mv /tmp/HTML5/src/htmlcoind /opt/${COMPONENT}/bin/ \
+    && mv /tmp/HTML5/src/qt/htmlcoin-qt /opt/${COMPONENT}/bin
 
 RUN set -x && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
