@@ -13,6 +13,11 @@ docker run \
   --name=htmlcoin \
   guggero/htmlcoin
 ```
+for docker-compose:
+
+```bash
+docker-compose up -d html
+```
 
 ## Run QT GUI
 
@@ -24,4 +29,10 @@ docker run \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -v /some/directorya:/htmlcoin \
   guggero/htmlcoin /opt/htmlcoin/bin/htmlcoin-qt
+```
+
+for docker-compose:
+
+```bash
+docker-compose up -d html-qt
 ```

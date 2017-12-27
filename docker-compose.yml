@@ -1,0 +1,19 @@
+version: '3'
+  
+services:
+  html-qt:
+    image: guggero/htmlcoin
+    environment:
+      - DISPLAY=$DISPLAY
+    volumes:
+      - '~/crypto/html:/htmlcoin'
+      - '/tmp/.X11-unix:/tmp/.X11-unix'
+    stdin_open: true
+    tty: true
+    command: /opt/htmlcoin/bin/htmlcoin-qt
+
+  html:
+    image: guggero/htmlcoin
+    volumes:
+      - '~/crypto/html:/htmlcoin'
+
