@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:xenial-20210114
 MAINTAINER Oliver Gugger <gugger@gmail.com>
 
 ARG USER_ID
